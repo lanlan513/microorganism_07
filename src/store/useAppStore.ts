@@ -19,7 +19,7 @@ interface AppState {
   setActiveCategory: (category: MicrobeCategory | null) => void;
 }
 
-export const useAppStore = create<AppState>((set, get) => ({
+export const useAppStore = create<AppState>((set) => ({
   microbes: [],
   microbe: null,
   related: [],

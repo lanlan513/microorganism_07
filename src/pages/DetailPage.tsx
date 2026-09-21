@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Ruler, MapPin, Sparkles, Share2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Ruler, MapPin, Sparkles, Share2, Heart, Copy, Palette } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { MicrobeCard } from '../components/MicrobeCard';
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../../shared/types';
+import { annotationApi } from '../utils/annotationApi';
+import type { CardSummary } from '../../shared/annotations';
 
 export function DetailPage() {
   const { id } = useParams<{ id: string }>();
   const { microbe, related, loading, fetchMicrobeById, fetchRelated } = useAppStore();
+  const [cards, setCards] = useState<CardSummary[]>([]);
 
   useEffect(() => {
     if (id) {
@@ -15,9 +18,19 @@ export function DetailPage() {
       if (!isNaN(numId)) {
         fetchMicrobeById(numId);
         fetchRelated(numId);
+        annotationApi.listCorridor(numId).then(setCards).catch(() => setCards([]));
       }
     }
   }, [id, fetchMicrobeById, fetchRelated]);
+
+  const toggleLike = async (cardId: string) => {
+    const r = await annotationApi.like(cardId);
+    setCards((list) => list.map((c) => (c.id === cardId ? { ...c, likeCount: r.likeCount, liked: r.liked } : c)));
+  };
+  const forkCard = async (specimenId: number, cardId: string) => {
+    const r = await annotationApi.fork(cardId);
+    window.location.href = `/studio/${specimenId}/${r.id}`;
+  };
 
   if (loading) {
     return (
@@ -190,8 +203,74 @@ export function DetailPage() {
           </div>
         </div>
 
+        {/* 显微镜视野涂鸦共享馆：讲解卡片 */}
+        <section className="mt-28 animate-fade-in-up stagger-4 opacity-0">
+          <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="font-mono text-xs tracking-[0.3em] uppercase block mb-3 flex items-center gap-2" style={{ color }}>
+                <Palette className="w-4 h-4" /> Field Notes
+              </span>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-text-light">
+                这个视野的讲解卡片
+              </h2>
+              <p className="text-white/45 text-sm mt-2">
+                圈出鞭毛、标出正在分裂的细胞、写两句讲解——矢量笔迹存服务端，发布经审核后挂进公共走廊。
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Link to={`/corridor/${microbe.id}`} className="px-4 py-2 rounded-xl border border-white/15 text-white/70 text-sm hover:border-white/30">
+                进入公共走廊
+              </Link>
+              <Link
+                to={`/studio/${microbe.id}`}
+                className="px-4 py-2 rounded-xl text-sm flex items-center gap-2"
+                style={{ background: `${color}22`, border: `1px solid ${color}66`, color }}
+              >
+                <Palette className="w-4 h-4" /> 我来圈一张
+              </Link>
+            </div>
+          </div>
+
+          {cards.length === 0 ? (
+            <div className="glass-card p-10 text-center text-white/40 text-sm">
+              还没有公开卡片，成为第一个在这个视野上做讲解的人 →
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-5">
+              {cards.map((c) => (
+                <div key={c.id} className="glass-card p-6">
+                  <Link to={`/cards/${c.id}`} className="block">
+                    <h3 className="font-display text-xl font-semibold text-white hover:text-teal-300">{c.title}</h3>
+                    <p className="text-white/40 text-xs mt-1">
+                      {c.authorName} · {c.opCount} 条批注 · v{c.version}
+                    </p>
+                    <p className="text-white/70 text-sm leading-6 mt-3 line-clamp-3 whitespace-pre-line">{c.note}</p>
+                  </Link>
+                  <div className="flex items-center gap-3 mt-4 pt-3 border-t border-white/5">
+                    <button
+                      onClick={() => toggleLike(c.id)}
+                      className={`text-sm flex items-center gap-1.5 ${c.liked ? 'text-pink-300' : 'text-white/50 hover:text-pink-300'}`}
+                    >
+                      <Heart className={`w-4 h-4 ${c.liked ? 'fill-pink-300' : ''}`} /> {c.likeCount}
+                    </button>
+                    <button
+                      onClick={() => forkCard(c.specimenId, c.id)}
+                      className="text-sm flex items-center gap-1.5 text-white/50 hover:text-teal-300"
+                    >
+                      <Copy className="w-4 h-4" /> 复刻继续画
+                    </button>
+                    <Link to={`/studio/${c.specimenId}/${c.id}`} className="text-sm text-white/50 hover:text-teal-300 ml-auto">
+                      追加批注 →
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
         {related.length > 0 && (
-          <section className="mt-32 animate-fade-in-up stagger-4 opacity-0">
+          <section className="mt-24 animate-fade-in-up stagger-4 opacity-0">
             <div className="flex items-end justify-between mb-10">
               <div>
                 <span

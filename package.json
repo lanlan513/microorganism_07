@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "check": "tsc --noEmit",
     "server:dev": "nodemon",
-    "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\""
+    "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
+    "test:merge": "tsx --test api/tests/merge.test.ts",
+    "test:e2e": "tsx api/tests/e2e.ts",
+    "test": "npm run test:merge && npm run test:e2e"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Dna, Search, Menu, X } from 'lucide-react';
+import { Home, Dna, Search, Menu, X, Palette, ShieldCheck } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export function Navbar() {
@@ -19,6 +19,8 @@ export function Navbar() {
     { to: '/category/fungi', label: '真菌', icon: Dna },
     { to: '/category/virus', label: '病毒', icon: Dna },
     { to: '/category/archaea', label: '古菌', icon: Dna },
+    { to: '/corridor', label: '讲解走廊', icon: Palette },
+    { to: '/moderation', label: '审核台', icon: ShieldCheck },
   ];
 
   return (
@@ -65,7 +67,7 @@ export function Navbar() {
                 }`}
               >
                 <span className="flex items-center gap-2">
-                  {item.to === '/' && <Icon className="w-4 h-4" />}
+                  <Icon className="w-4 h-4" />
                   {item.label}
                 </span>
                 {isActive && (

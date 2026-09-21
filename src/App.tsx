@@ -6,6 +6,10 @@ import { HomePage } from './pages/HomePage';
 import { CategoryPage } from './pages/CategoryPage';
 import { DetailPage } from './pages/DetailPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { StudioPage } from './pages/StudioPage';
+import { CorridorPage } from './pages/CorridorPage';
+import { CardViewPage } from './pages/CardViewPage';
+import { ModerationPage } from './pages/ModerationPage';
 
 export default function App() {
   return (
@@ -18,6 +22,13 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/microbe/:id" element={<DetailPage />} />
+            {/* 显微镜视野涂鸦共享馆 */}
+            <Route path="/corridor" element={<CorridorPage />} />
+            <Route path="/corridor/:specimenId" element={<CorridorPage />} />
+            <Route path="/cards/:id" element={<CardViewPage />} />
+            <Route path="/studio/:specimenId" element={<StudioPage />} />
+            <Route path="/studio/:specimenId/:cardId" element={<StudioPage />} />
+            <Route path="/moderation" element={<ModerationPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .vite
+# 批注卡片运行期数据（文件存储，原型用；重启不丢但不入库）
+api/src/data/annotationStore.json
+api/src/data/annotationStore.json.tmp
+api/src/data/e2eStore.json
