@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, Ruler, MapPin, Sparkles, Share2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Ruler, MapPin, Sparkles, Share2, PenLine, Palette } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { MicrobeCard } from '../components/MicrobeCard';
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../../shared/types';
@@ -97,6 +97,23 @@ export function DetailPage() {
                     #{String(microbe.id).padStart(3, '0')}
                   </span>
                 </div>
+              </div>
+              {/* 涂鸦共享馆入口 */}
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link
+                  to={`/studio/${microbe.id}`}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full border border-glow-primary/40 bg-glow-primary/10 px-4 py-3 text-sm text-glow-primary transition-all hover:bg-glow-primary/20 hover:shadow-glow"
+                >
+                  <PenLine className="h-4 w-4" />
+                  在这个视野上圈划讲解
+                </Link>
+                <Link
+                  to={`/gallery?specimen=${microbe.id}`}
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-3 text-sm text-text-light transition-all hover:border-glow-primary/40 hover:text-glow-primary"
+                >
+                  <Palette className="h-4 w-4" />
+                  看这个标本的讲解卡片
+                </Link>
               </div>
             </div>
           </div>

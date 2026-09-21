@@ -95,6 +95,12 @@
            transition-all duration-300 ease-out
            text-sm tracking-wide cursor-pointer;
   }
+
+  .tool-btn {
+    @apply flex items-center justify-center rounded-full border border-white/10 p-2
+           text-text-muted transition-colors hover:border-glow-primary/40 hover:text-glow-primary
+           cursor-pointer;
+  }
 }
 
 @layer utilities {

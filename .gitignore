@@ -23,3 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 .vite
+# 涂鸦馆本地 JSON 库
+api/data/

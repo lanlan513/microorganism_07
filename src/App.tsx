@@ -6,6 +6,9 @@ import { HomePage } from './pages/HomePage';
 import { CategoryPage } from './pages/CategoryPage';
 import { DetailPage } from './pages/DetailPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { GalleryPage } from './annotations/GalleryPage';
+import { StudioPage } from './annotations/StudioPage';
+import { CardDetailPage } from './annotations/CardDetailPage';
 
 export default function App() {
   return (
@@ -18,6 +21,10 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/microbe/:id" element={<DetailPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/studio/:specimenId" element={<StudioPage />} />
+            <Route path="/studio/card/:cardId" element={<StudioPage />} />
+            <Route path="/cards/:cardId" element={<CardDetailPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
